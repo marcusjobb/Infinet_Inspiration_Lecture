@@ -91,19 +91,17 @@ Skriv något och tryck Enter. Svarar den? Tryck `Ctrl+D` för att avsluta.
 
 ## Steg 4 — Installera Screenpipe (CLI)
 
-Det finns två sätt — prova npm-varianten först, den är mer tillförlitlig på Linux:
-
-**Alternativ A — via npm (rekommenderas på Linux):**
 ```bash
 npm install -g screenpipe
 ```
 
-**Alternativ B — via curl-skript:**
+Har du inte npm installerat ännu?
+
 ```bash
-curl -fsSL get.screenpi.pe/cli | sh
+sudo apt install nodejs npm
 ```
 
-> Curl-skriptet fungerar inte alltid på alla Linux-varianter — binären kan hamna i npx-cachen utan att läggas till i PATH. Om du kör curl-varianten och `screenpipe` inte hittas efteråt, installera om med npm-kommandot ovan.
+Kör sedan `npm install -g screenpipe` igen.
 
 Verifiera att installationen gick bra:
 
@@ -111,16 +109,7 @@ Verifiera att installationen gick bra:
 screenpipe --version
 ```
 
-Ser du inget? Öppna ett **nytt** terminalfönster och försök igen. Fortfarande ingenting?
-
-```bash
-# Kontrollera om Node/npm är installerat
-node --version
-npm --version
-
-# Installera Node om det saknas (Ubuntu/Debian/Zorin)
-sudo apt install nodejs npm
-```
+Ser du inget — öppna ett nytt terminalfönster och försök igen.
 
 ---
 
