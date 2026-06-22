@@ -103,6 +103,44 @@ Privat. Snabbt. Gratis.
 
 ---
 
+## Men vad sparas egentligen?
+
+Screenpipe tar skärmdumpar hela dagen — det låter som mycket.
+
+Det smarta: vi sparar **texten**, inte bilderna.
+
+| Vad | Hur länge |
+|-----|-----------|
+| 📸 Bilder, video, ljud | **1 dag** — raderas så fort OCR:en är klar |
+| 📝 OCR-text, transkriptioner | **6 månader** — det är minnet |
+
+> *Bilder är råmaterial. Texten är minnet.*
+> Samma princip som din hjärna — du minns vad som sades, inte en exakt film.
+
+---
+
+## Blockera det du inte vill spara
+
+Screenpipe ser allt — **det är poängen, men också ansvaret.**
+
+Konfigurera vad den *inte* ska titta på:
+
+```bash
+# Ignorera lösenordshanterare helt
+--ignored-windows "1Password::" "Bitwarden::"
+
+# Spela inte in vad du kopierar (lösenord, nycklar)
+--disable-clipboard-capture
+
+# Aktivera automatisk borttagning av personnummer, e-post etc.
+--use-pii-removal
+```
+
+Startskript med rätt inställningar finns i repot.
+`scripts/start-screenpipe.sh` / `start-screenpipe.ps1`
+
+---
+
 <!-- _class: title -->
 
 # 👀 DEMO TID
