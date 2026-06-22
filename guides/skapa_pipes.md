@@ -81,25 +81,68 @@ Under det har vi **prompten** — instruktionerna till AI:n.
 
 ---
 
-## Hantera dina pipes
+## Installera en pipe
 
-Via terminalen:
+Det finns tre sätt beroende på varifrån pipen kommer.
+
+### Alternativ A — från det här repot (enklast)
+
+Kopiera pipe-mappen till Screenpipes pipes-katalog och aktivera den:
+
+**Linux / macOS:**
+```bash
+cp -r pipes/leet-time ~/.screenpipe/pipes/
+screenpipe pipe enable leet-time-reminder
+```
+
+**Windows (PowerShell):**
+```powershell
+Copy-Item -Recurse pipes\leet-time "$env:USERPROFILE\.screenpipe\pipes\"
+screenpipe pipe enable leet-time-reminder
+```
+
+Byt ut `leet-time` och `leet-time-reminder` mot valfri pipe från `pipes/`-mappen.
+
+---
+
+### Alternativ B — från GitHub
 
 ```bash
-# Lista alla installerade pipes
-npx -y screenpipe@latest pipe list
+screenpipe pipe install https://github.com/anvandare/pipe-repo
+screenpipe pipe enable pipe-namn
+```
 
-# Aktivera en pipe
-npx -y screenpipe@latest pipe enable min-pipe
+---
 
-# Stäng av en pipe
-npx -y screenpipe@latest pipe disable min-pipe
+### Alternativ C — skapa en ny direkt
 
-# Kör en pipe manuellt (för att testa)
-npx -y screenpipe@latest pipe run min-pipe
+```bash
+# Skapa mappen och filen för hand
+mkdir -p ~/.screenpipe/pipes/min-pipe
+# Skapa pipe.md (se format nedan)
+screenpipe pipe enable min-pipe
+```
 
-# Visa loggar
-npx -y screenpipe@latest pipe logs min-pipe
+---
+
+## Hantera dina pipes
+
+```bash
+# Lista alla pipes och deras status
+screenpipe pipe list
+
+# Aktivera / stäng av
+screenpipe pipe enable min-pipe
+screenpipe pipe disable min-pipe
+
+# Kör manuellt för att testa
+screenpipe pipe run min-pipe
+
+# Visa loggar (bra vid felsökning)
+screenpipe pipe logs min-pipe
+
+# Ta bort en pipe helt
+screenpipe pipe delete min-pipe
 ```
 
 ---
