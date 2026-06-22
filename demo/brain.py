@@ -1,39 +1,67 @@
-import os, sys, json, requests
+import os, sys, json, readline, requests
 
-SCREENPIPE = "http://localhost:3030"
-OLLAMA     = "http://localhost:11434"
-MODEL      = os.getenv("AI_MODEL", "ministral-3")
-SP_KEY     = os.getenv("SCREENPIPE_API_KEY", "")
+OLLAMA    = "http://localhost:11434"
+MODEL     = os.getenv("AI_MODEL", "gemma3:4b")
+EYE_DIR   = os.path.expanduser("~/.eye")
 
-
-def search(query: str) -> str:
-    try:
-        r = requests.get(
-            f"{SCREENPIPE}/search",
-            params={"q": query, "limit": 5, "content_type": "ocr"},
-            headers={"Authorization": f"Bearer {SP_KEY}"} if SP_KEY else {},
-            timeout=5,
-        )
-        items = r.json().get("data", [])
-        return "\n---\n".join(
-            i["content"]["text"] for i in items
-            if i.get("content", {}).get("text")
-        )
-    except Exception:
-        return ""
-
+BRAIN_MARKERS = ("›", "📎", "🧠", "Brain ·", "AI:", "[fel]", "Hejdå")
+MAX_CTX      = 1500
+MAX_HISTORY  = 4
 
 SYSTEM = (
     "Du är en kortfattad assistent. Svara alltid med 1–3 meningar. "
     "Ge bara längre svar om användaren explicit ber om det (t.ex. 'förklara', 'berätta mer', 'lista')."
 )
 
-def ask(question: str, context: str) -> None:
-    prompt = (
-        f"{SYSTEM}\n\nKontext från användarens skärm:\n{context}\n\nFråga: {question}\nSvar:"
-        if context else
-        f"{SYSTEM}\n\nFråga: {question}\nSvar:"
-    )
+
+LOG_FILE = os.path.join(EYE_DIR, "log.jsonl")
+
+def read_eye(source: str) -> str:
+    """Läser JSONL-loggen. source='' → alla appar, annars filtrerat på app."""
+    try:
+        with open(LOG_FILE) as f:
+            entries = [json.loads(l) for l in f if l.strip()]
+    except FileNotFoundError:
+        return ""
+    if source:
+        entries = [e for e in entries if source in e.get("app", "")]
+    return "\n---\n".join(e["text"] for e in entries)
+
+
+def extract(text: str, words: list) -> str:
+    lines = [l for l in text.splitlines(keepends=True)
+             if not any(l.strip().startswith(m) for m in BRAIN_MARKERS)]
+    if words:
+        relevant = [l for l in lines if any(w in l.lower() for w in words)]
+        return "".join(relevant)[:MAX_CTX].strip()
+    return "".join(lines)[:MAX_CTX].strip()
+
+
+def search(query: str, source: str) -> tuple[str, str]:
+    words = [w.lower() for w in query.split() if len(w) > 2]
+    text = read_eye(source)
+    if not text:
+        label = f"{source} (ingen logg)" if source else "eye (ingen logg)"
+        return "", label
+    ctx = extract(text, words)
+    label = source if source else "eye"
+    return ctx, label
+
+
+def build_prompt(question: str, context: str, history: list) -> str:
+    parts = [SYSTEM]
+    if context:
+        parts.append(f"\nKontext från användarens skärm:\n{context}")
+    if history:
+        parts.append("\nTidigare i samtalet:")
+        for h in history:
+            parts.append(f"Användare: {h['q']}\nAssistent: {h['a']}")
+    parts.append(f"\nAnvändare: {question}\nAssistent:")
+    return "\n".join(parts)
+
+
+def ask(question: str, context: str, history: list) -> str:
+    prompt = build_prompt(question, context, history)
     try:
         r = requests.post(
             f"{OLLAMA}/api/generate",
@@ -43,28 +71,45 @@ def ask(question: str, context: str) -> None:
         )
     except requests.exceptions.ConnectionError:
         print(f"[fel] Ollama svarar inte på {OLLAMA} — är den igång?")
-        return
+        return ""
+    reply = []
     for line in r.iter_lines():
         if line:
             data = json.loads(line)
             if "error" in data:
                 print(f"[fel] {data['error']}")
-                return
-            print(data.get("response", ""), end="", flush=True)
+                return ""
+            token = data.get("response", "")
+            print(token, end="", flush=True)
+            reply.append(token)
     print()
+    return "".join(reply).strip()
 
 
 def main():
-    print(f"\n🧠  Brain  ·  {MODEL}  ·  Screenpipe\n")
+    print("\033c", end="", flush=True)
+    print(f"\n🧠  Brain  ·  {MODEL}  ·  Eye (screenshot+OCR)")
+    print("   Tips: skriv 'obsidian: fråga' för att fånga ett specifikt fönster\n")
+    history = []
     while True:
         try:
-            q = input("› ").strip()
-            if not q:
+            raw = input("› ").strip()
+            if not raw:
                 continue
-            ctx = search(q)
-            print(f"{'📎 ' if ctx else ''}AI: ", end="", flush=True)
-            ask(q, ctx)
+
+            if ": " in raw:
+                source, q = raw.split(": ", 1)
+                source = source.strip()
+            else:
+                source, q = "", raw
+
+            ctx, label = search(q, source)
+            prefix = f"📎[{label}] " if ctx else ""
+            print(f"{prefix}AI: ", end="", flush=True)
+            answer = ask(q, ctx, history[-MAX_HISTORY:])
             print()
+            if answer:
+                history.append({"q": q, "a": answer})
         except KeyboardInterrupt:
             print("\nHejdå!")
             sys.exit(0)
