@@ -4,7 +4,8 @@ from .base import ChatProvider
 
 
 # 1minAI använder API-KEY-header (inte Bearer) och ett eget request-format.
-# Docs: https://docs.1min.ai/docs/api/chat-with-ai-api
+# Skaffa API-nyckel: https://app.1min.ai/api?referrer_id=9b12faba-f8a3-49ea-bd25-d8343f1fd965
+# Alla tillgängliga modeller: https://docs.1min.ai/docs/api/chat-with-ai-api?referrer_id=9b12faba-f8a3-49ea-bd25-d8343f1fd965
 class OneMinAIProvider(ChatProvider):
     def __init__(self, model: str = "gpt-4o-mini", api_key: str = None):
         super().__init__(model)

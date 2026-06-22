@@ -36,3 +36,9 @@ Marcus Medina · Infinet · 2026
 - [ollama.com](https://ollama.com) — ladda ner Ollama
 - [docs.screenpipe.com](https://docs.screenpipe.com) — dokumentation
 - [github.com/screenpipe/screenpipe](https://github.com/screenpipe/screenpipe) — källkod (open source)
+
+### AI-tjänster för demo/screenpipe-chat
+
+- [1minAI — skaffa API-nyckel](https://app.1min.ai/api?referrer_id=9b12faba-f8a3-49ea-bd25-d8343f1fd965) — 100+ modeller, generöst gratiskonto
+- [1minAI — alla tillgängliga modeller](https://docs.1min.ai/docs/api/chat-with-ai-api?referrer_id=9b12faba-f8a3-49ea-bd25-d8343f1fd965)
+- [openrouter.ai](https://openrouter.ai) — aggregator för 200+ modeller
