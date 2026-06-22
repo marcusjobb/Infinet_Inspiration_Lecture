@@ -48,24 +48,42 @@ ollama --version
 
 ---
 
-## Steg 4 — Ladda ner en AI-modell
+## Steg 4 — Välj och ladda ner en AI-modell
+
+Välj en modell som passar din dator. Vet du inte vad du har — ta `qwen2.5:3b`, den funkar på nästan allt.
+
+| Modell | Storlek | Krav | Bra för |
+|--------|---------|------|---------|
+| `gemma2:2b` | ~1.6 GB | 4 GB RAM | Svag dator, CPU-only |
+| `qwen2.5:3b` | ~2 GB | 4 GB RAM | Bra balans, rekommenderas som start |
+| `phi3.5:mini` | ~2.2 GB | 4 GB RAM | Stark på text, bra på gamla Intel-laptops |
+| `llama3.2:3b` | ~2 GB | 4 GB RAM | Metas minsta, snabb |
+| `mistral:7b` | ~4.1 GB | 8 GB RAM | Klassiker, solid kvalitet |
+| `qwen2.5:7b` | ~4.7 GB | 8 GB RAM | Bästa kvalitet i 7B-klassen |
+| `ministral` | ~5 GB | 8–12 GB RAM | Ministral 3.8B instruct — det vi kör |
+| `llama3.1:8b` | ~4.7 GB | 8 GB RAM | Bra allround |
+
+> **Kör du Apple Silicon (M1/M2/M3/M4)?**
+> Grattis — din Mac kör AI-modeller ovanligt snabbt tack vare unified memory. Även en M1 med 8 GB klarar `mistral:7b` utan problem.
+>
+> **Gammal Intel Mac?**
+> Håll dig till `qwen2.5:3b` eller `gemma2:2b` — körs på CPU och fungerar bra.
+
+Ladda ner din valda modell (byt ut modellnamnet mot ditt val):
 
 ```bash
-ollama pull llama3.2
+ollama pull qwen2.5:3b
 ```
 
-Det här laddar ner modellen (ca 2 GB) — kan ta ett par minuter beroende på din uppkoppling. Hämta en kaffe. ☕
+Det här laddar ner modellen — kan ta ett par minuter. Hämta en kaffe. ☕
 
 Testa att den fungerar:
 
 ```bash
-ollama run llama3.2
+ollama run qwen2.5:3b
 ```
 
 Skriv något och tryck Enter. Svarar den? Tryck `Ctrl+D` för att avsluta.
-
-> **Kör du Apple Silicon (M1/M2/M3/M4)?** Grattis — din dator kör AI-modeller ovanligt snabbt.
-> Prova gärna `ollama pull mistral` för bättre resultat om du har 8 GB RAM eller mer.
 
 ---
 
