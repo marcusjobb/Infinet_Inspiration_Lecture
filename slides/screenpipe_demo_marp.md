@@ -3,7 +3,7 @@ marp: true
 theme: default
 class: invert
 paginate: true
-footer: "Infinet · Marcus Medina · 2026"
+footer: "InFiNet Code Summer AI Bootcamp 2026 · Marcus Medina"
 style: |
   section {
     font-family: 'Segoe UI', system-ui, sans-serif;
@@ -12,9 +12,16 @@ style: |
   section.title {
     text-align: center;
   }
+  section.big {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
   h1 { color: #7dd3fc; }
   h2 { color: #86efac; }
   code { background: #1e293b; color: #e2e8f0; }
+  blockquote { border-left: 4px solid #7dd3fc; color: #cbd5e1; }
   .columns {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -24,138 +31,162 @@ style: |
 
 <!-- _class: title invert -->
 
-# Din digitala hjärna 🧠
+# Din AI, Dina Regler 🔒
 
-### Screenpipe + Ollama — en lokal AI som aldrig glömmer
+### The Sovereign Stack
+#### Ollama + Screenpipe + 60 rader Python
 
-Marcus Medina · Infinet
-
----
-
-## Vi glömmer saker
-
-Du hade ett samtal, läste en artikel, öppnade en fil.
-En vecka senare — **minns du det?**
-
-Troligtvis inte.
-
-> *"Det var någonstans i den där Teams-chatten... eller var det ett mejl?"*
-
-Hjärnan är inte byggd för att hålla koll på allt.
-Men din dator ser allt.
+Marcus Medina · Senior Consultant · 25 år i branschen
 
 ---
 
-## Lösningar som redan finns
+<!-- _class: big -->
 
-| Verktyg | Hur | Kostnad |
-|---------|-----|---------|
-| **Microsoft Recall** | Skärmdumpar + AI-sökning | Gratis (Win 11) |
-| **Rewind / Limitless** | Molnbaserat, alltid på | ~$20/mån |
-| **Littlebird** | Lokal + AI | Dyrare |
-| **Screenpipe** | Lokal, open source | **Gratis** |
+> *"Framtiden söker inte folk som testat AI —*
+> *den söker problemlösare."*
 
 ---
 
-## Screenpipe — vad är det egentligen?
+## Ni har lärt er AI, agenter, infrastruktur.
 
-Ett program som körs i bakgrunden och:
+Ni är redo att bygga.
 
-1. **Spelar in din skärm** kontinuerligt (komprimerat, lokalt)
-2. **Kör OCR** — läser texten i allt du ser
-3. **Indexerar allt** i en lokal databas
-
-Du kan sedan söka: *"vad hade jag uppe igår klockan 14?"*
-
-> Audioinspelning finns men vi kör utan — skärmen räcker för minnet.
+**Men vem äger er stack?**
 
 ---
 
-## Ollama — AI på din egna dator
+## IKEA-verktygssatsen
 
-Ollama låter dig köra stora språkmodeller **helt lokalt**.
+Ser bra ut i butiken. Allt på ett ställe.
+
+Köpte en när jag flyttade in i min studentlägenhet.
+Använde den en gång.
+
+Hittade aldrig grejerna igen.
+
+*Om jag lagt tillbaka dem hade det varit en alldeles utmärkt låda med redskap.*
+
+**Men jag är slarvig. Så det funkade inte.**
+
+---
+
+## Jag är en virrigskalle
+
+Jag har en idé, öppnar tre flikar, skriver något.
+
+En timme senare — borta.
+
+*"Det var i den där chatten... eller ett mejl... eller ett dokument?"*
+
+**Min dator glömmer ingenting. Det finns en lösning — och den är gratis.**
+
+---
+
+## Alternativen som finns
+
+| Verktyg | Minne | Din data | Kostnad |
+|---------|-------|----------|---------|
+| Rewind / Limitless | ✅ | I molnet | ~$20/mån |
+| Microsoft Recall | ✅ | Oklart | Gratis (Win 11) |
+| **Screenpipe + Ollama** | ✅ | **Stannar hos dig** | **Gratis** |
+
+---
+
+## The Sovereign Stack
+
+```
+Ollama          → LLM på din egen dator
+Screenpipe      → Minne av allt du sett på skärmen
+Python          → 60 rader som kopplar ihop allt
+```
+
+**Ingen data lämnar maskinen.**
+Inget moln. Inga API-nycklar. Ingen månadsavgift.
+
+---
+
+## Ollama — LLM på din laptop
 
 ```bash
-ollama pull llama3.2
-ollama run llama3.2
+ollama pull ministral-3
+ollama run ministral-3
 ```
 
-- Inget moln. Inga API-nycklar. Ingen månadsavgift.
-- Dina data stannar **hos dig**
+- Kör stora språkmodeller helt offline
+- Gratis, open source
+- Fungerar på vanlig hårdvara
 
-> Det är det här vi kopplar ihop med Screenpipe.
+> Ministral-3b: 6 GB RAM. Kör på din laptop. Svarar på sekunder.
 
 ---
 
-## Screenpipe + Ollama = 🔥
+## Screenpipe — så funkar det
 
-```
-Din skärm
-    ↓  (OCR + inspelning)
-Screenpipe
-    ↓  (frågar: "vad hände idag?")
-Ollama (lokal AI)
-    ↓  (svarar baserat på din data)
-Du
-```
+Körs i bakgrunden och:
 
-**Ingen data lämnar din dator.**
-Privat. Snabbt. Gratis.
+1. **Spelar in skärmen** kontinuerligt
+2. **OCR:ar** allt text du ser — i realtid
+3. **Indexerar** allt lokalt på din dator
+
+> *"Vad hade jag uppe igår klockan 14?"*
+> Nu kan du faktiskt få svar.
 
 ---
 
 ## Men vad sparas egentligen?
 
-Screenpipe tar skärmdumpar hela dagen — det låter som mycket.
-
-Det smarta: vi sparar **texten**, inte bilderna.
+Vi sparar **texten**, inte bilderna.
 
 | Vad | Hur länge |
 |-----|-----------|
-| 📸 Bilder, video, ljud | **1 dag** — raderas så fort OCR:en är klar |
-| 📝 OCR-text, transkriptioner | **6 månader** — det är minnet |
+| 📸 Bilder och video | **1 dag** — raderas när OCR är klar |
+| 📝 OCR-text | **6 månader** — det är minnet |
 
-> *Bilder är råmaterial. Texten är minnet.*
-> Samma princip som din hjärna — du minns vad som sades, inte en exakt film.
-
----
-
-## Blockera det du inte vill spara
-
-Screenpipe ser allt — **det är poängen, men också ansvaret.**
-
-Konfigurera vad den *inte* ska titta på:
-
-```bash
-# Ignorera lösenordshanterare helt
---ignored-windows "1Password::" "Bitwarden::"
-
-# Spela inte in vad du kopierar (lösenord, nycklar)
---disable-clipboard-capture
-
-# Aktivera automatisk borttagning av personnummer, e-post etc.
---use-pii-removal
-```
-
-Startskript med rätt inställningar finns i repot.
-`scripts/start-screenpipe.sh` / `start-screenpipe.ps1`
+> Samma princip som din hjärna.
+> Du minns vad som sades — inte en exakt film.
 
 ---
 
-## Varför vi stängde av det här
+## Vi stängde av det här — med flit
 
-Screenpipe *kan* spela in ljud, clipboard och allt du skriver.
-Vi valde att inte göra det — och det är ett aktivt val.
+Screenpipe *kan* spela in allt. Vi valde bort det.
 
 | Stängt av | Anledning |
 |-----------|-----------|
-| 🎙️ Ljudinspelning | Spela in andras röster utan deras vetskap är spionage |
-| 📋 Clipboard | Lösenord, API-nycklar och känslig text passerar ofta där |
-| ⌨️ Tangenttryckningar | Allt du skriver — lösenord, sökningar, privata meddelanden |
-| 🔑 Lösenordshanterare | Explicit blockerade, syns aldrig i databasen |
+| 🎙️ Ljudinspelning | Spela in andras röster utan vetskap = spionage |
+| 📋 Clipboard | Lösenord och API-nycklar passerar där |
+| ⌨️ Tangenttryckningar | Allt du skriver — lösenord, privata meddelanden |
+| 🔑 Lösenordshanterare | Explicit blockerade — syns aldrig |
 
 > **Verktyget är kraftfullt just för att det ser allt.**
-> Det är ditt ansvar att bestämma vad det faktiskt ska se.
+> Det är ert ansvar att bestämma vad det ska se.
+
+---
+
+<!-- _class: title -->
+
+# 🧠 brain.py
+
+*60 rader. Lokal AI med skärmminne.*
+
+---
+
+## Hela stacken — i koden
+
+```python
+SCREENPIPE = "http://localhost:3030"
+OLLAMA     = "http://localhost:11434"
+MODEL      = "ministral-3"
+```
+
+```python
+def search(query):          # Frågar Screenpipe om kontext
+def ask(question, context): # Skickar till Ollama, streamar svar
+def main():                 # REPL-loop — fråga, svar, upprepa
+```
+
+**Det är hela arkitekturen.**
+Inga ramverk. Ingen komplexitet. Ni förstår varje rad.
 
 ---
 
@@ -163,36 +194,34 @@ Vi valde att inte göra det — och det är ett aktivt val.
 
 # 👀 DEMO TID
 
-*Screenpipe i aktion*
+*Notepad → brain.py → "Vad hade jag uppe?"*
 
 ---
 
-## Vad är pipes?
+## Pipes — schemalagda mini-agenter
 
-Pipes är **schemalagda mini-agenter** i Screenpipe.
-
-En pipe är en enkel textfil (`pipe.md`) som säger:
-- *När* ska den köras (klockan, var X minut, etc.)
-- *Vad* den ska göra
+En pipe är en textfil som Screenpipe kör automatiskt.
 
 ```yaml
 ---
-name: min-pipe
-schedule: every 30m
+name: leet-time-reminder
+schedule: 37 13 * * *
 ---
 
-Kolla vad jag jobbat med senaste 30 minuterna
-och skriv en kort sammanfattning till ./output/
+Det är 13:37. Skicka en notis med titeln "1337".
+Summera vad jag jobbat med de senaste 30 minuterna.
 ```
 
+**Standard cron-syntax. En textfil. Inga ramverk.**
+
 ---
 
-## Pipes — det du kan bygga
+## Vad ni kan bygga med pipes
 
-- 📧 **Gmail-summering** — sammanfatta olästa mejl varje morgon
+- 📧 **Morgonsummering** — sammanfatta olästa mejl kl 08:00
 - 📅 **Kalender-påminnelse** — "Du har möte om 15 minuter"
-- 📝 **Dagbok** — automatisk daglig summering till Obsidian
-- 🔔 **Notiser** — skicka desktop-notis baserat på vad du ser
+- 📝 **Automatisk dagbok** — sparas till Obsidian varje kväll
+- 🔔 **Context-aware notiser** — baserat på vad du faktiskt ser
 - ⏰ **13:37** — den viktigaste av alla pipes
 
 ---
@@ -206,51 +235,13 @@ och skriv en kort sammanfattning till ./output/
 name: leet-time-reminder
 schedule: 37 13 * * *
 ---
-
-Det är 13:37. Skicka en notis med titeln "1337".
-Summera de senaste 30 minuternas arbete.
 ```
 
-**Standard cron-syntax fungerar.**
-`37 13 * * *` = varje dag klockan 13:37 exakt.
+**Prioritet framför allt.**
 
 ---
 
-## Gmail-pipe (konceptet)
-
-```yaml
----
-name: morgon-mejl
-schedule: 0 8 * * 1-5
----
-
-Hämta olästa mejl via Gmail API (credentials i .env).
-Lista de tre viktigaste med ett kort sammandrag vardera.
-Ignorera nyhetsbrev och automatiska mejl.
-Skriv resultatet till ./output/mejl-{datum}.md
-```
-
-Kräver Google API-nyckel i `.env` — **steg-för-steg i pipeguiden**.
-
----
-
-## Google Kalender-pipe
-
-```yaml
----
-name: kalender-pamiannelse
-schedule: 0 8 * * 1-5
----
-
-Hämta dagens händelser via Google Calendar API.
-Om det finns möten — skicka en notis med nästa möte
-och hur lång tid det är kvar.
-Skriv agendan till ./output/agenda-{datum}.md
-```
-
----
-
-## Nu kör vi — installera tillsammans
+## Installera tillsammans
 
 **Windows 11** (PowerShell som admin):
 ```powershell
@@ -258,46 +249,61 @@ winget install Ollama.Ollama
 iwr get.screenpi.pe/cli.ps1 | iex
 ```
 
-**Linux / macOS** (Terminal):
+**macOS:**
 ```bash
-curl -fsSL https://ollama.com/install.sh | sh   # Linux
-brew install ollama screenpipe                   # macOS
-curl -fsSL get.screenpi.pe/cli | sh              # Linux
+brew install ollama screenpipe
 ```
 
-**Fullständiga guider finns i repot** (Windows, Linux, Mac)
+**Linux:**
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+npm install -g screenpipe
+```
+
+**Fullständiga guider och startskript finns i repot.**
+
+---
+
+## Dopamine-Driven Development
+
+> *Ship MVPs in 7 days. Build for feedback loops, not perfection.*
+
+Ni har precis sett en fungerande lokal AI-stack.
+Byggtid: en kväll.
+Kostnad: noll kronor.
+
+**Det är ert konkurrensvärde — ni kan bygga det här.**
 
 ---
 
 ## Ta med dig hem
 
-**Repot med allt material:**
+**Repot med allt:**
 `github.com/MarcusMedina/Infinet_Inspiration_Lecture`
 
-Innehåller:
-- Den här presentationen
-- Installationsguider (Windows, Linux, Mac)
-- Pipe-guide med exempelkod
-- Färdiga pipe-filer att testa direkt
+| Fil | Innehåll |
+|-----|----------|
+| `demo/brain.py` | Den kompletta brain-scriptet |
+| `guides/` | Installation för Windows, Linux, Mac |
+| `guides/skapa_pipes.md` | Bygg egna pipes, steg för steg |
+| `pipes/` | Färdiga pipes att kopiera direkt |
+| `scripts/` | Startskript med rätt privacy-inställningar |
 
 ---
 
 ## Bonus — Screenpipe + Claude Code
 
-Har du Claude Code? Koppla in Screenpipe som ett MCP-verktyg:
-
 ```bash
 claude mcp add screenpipe -- npx -y screenpipe-mcp
 ```
 
-Nu kan du fråga Claude direkt:
+Nu kan du fråga Claude direkt om din skärmhistorik:
 
 > *"Vad jobbade jag med igår klockan 14?"*
-> *"Sammanfatta mitt möte från i morse."*
+> *"Sammanfatta mötet från i morse."*
 > *"Vilket GitHub-repo öppnade jag förra veckan?"*
 
-Claude hämtar svaret från din lokala skärmhistorik.
-Ingen data lämnar din dator. 🔒
+Ingen data lämnar maskinen. 🔒
 
 ---
 
@@ -307,15 +313,19 @@ Ingen data lämnar din dator. 🔒
 
 *Och tack för att ni lyssnade.*
 
+Marcus Medina
+`marcus.medina@nionit.com`
+
 ---
 
 <!-- _class: title -->
 
-# Bonus: nyttiga länkar
+# Nyttiga länkar
 
 - `screenpipe.com` — officiell sida
 - `ollama.com` — ladda ner Ollama
-- `docs.screenpipe.com` — fullständig dokumentation
-- `github.com/screenpipe/screenpipe` — källkod
+- `docs.screenpipe.com` — dokumentation
+- `1min.ai` — 100+ modeller, 15 000 gratistokens/dag
+- `openrouter.ai` — aggregator för 200+ modeller
 
 *Allt är open source. Gräv gärna.*
