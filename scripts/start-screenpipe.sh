@@ -31,6 +31,6 @@ exec screenpipe record \
     --retention-mode media \
     --video-quality low \
     --language swedish \
-    --filter-music \
+    --disable-audio \
     --disable-clipboard-capture \
     "${IGNORE_ARGS[@]}"

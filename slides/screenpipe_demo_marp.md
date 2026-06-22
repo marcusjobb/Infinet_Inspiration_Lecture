@@ -63,10 +63,11 @@ Ett program som körs i bakgrunden och:
 
 1. **Spelar in din skärm** kontinuerligt (komprimerat, lokalt)
 2. **Kör OCR** — läser texten i allt du ser
-3. **Spelar in ljud** och transkriberar
-4. **Indexerar allt** i en lokal databas
+3. **Indexerar allt** i en lokal databas
 
-Du kan sedan söka: *"vad pratade jag om igår klockan 14?"*
+Du kan sedan söka: *"vad hade jag uppe igår klockan 14?"*
+
+> Audioinspelning finns men vi kör utan — skärmen räcker för minnet.
 
 ---
 

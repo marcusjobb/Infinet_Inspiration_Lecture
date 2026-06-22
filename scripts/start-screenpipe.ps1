@@ -27,6 +27,6 @@ $IgnoreArgs = $IgnoredWindows | ForEach-Object { @("--ignored-windows", $_) }
     --retention-mode media `
     --video-quality low `
     --language swedish `
-    --filter-music `
+    --disable-audio `
     --disable-clipboard-capture `
     @IgnoreArgs
