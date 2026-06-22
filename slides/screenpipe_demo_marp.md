@@ -142,6 +142,23 @@ Startskript med rätt inställningar finns i repot.
 
 ---
 
+## Varför vi stängde av det här
+
+Screenpipe *kan* spela in ljud, clipboard och allt du skriver.
+Vi valde att inte göra det — och det är ett aktivt val.
+
+| Stängt av | Anledning |
+|-----------|-----------|
+| 🎙️ Ljudinspelning | Spela in andras röster utan deras vetskap är spionage |
+| 📋 Clipboard | Lösenord, API-nycklar och känslig text passerar ofta där |
+| ⌨️ Tangenttryckningar | Allt du skriver — lösenord, sökningar, privata meddelanden |
+| 🔑 Lösenordshanterare | Explicit blockerade, syns aldrig i databasen |
+
+> **Verktyget är kraftfullt just för att det ser allt.**
+> Det är ditt ansvar att bestämma vad det faktiskt ska se.
+
+---
+
 <!-- _class: title -->
 
 # 👀 DEMO TID
