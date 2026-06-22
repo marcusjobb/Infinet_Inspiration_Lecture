@@ -20,13 +20,28 @@ Marcus Medina · Infinet · 2026
 
 ---
 
-## Snabbstart
+## Snabbstart — Screenpipe + Ollama
 
 1. Installera Ollama → [ollama.com](https://ollama.com)
 2. Kör `ollama pull llama3.2`
-3. Installera Screenpipe → [screenpipe.com/onboarding](https://screenpipe.com/onboarding)
-4. Koppla ihop via Settings → AI Provider → Ollama → `http://localhost:11434`
+3. Installera Screenpipe → `npm install -g screenpipe`
+4. Starta → `screenpipe record`
 5. Kopiera en pipe-mapp till `~/.screenpipe/pipes/` och aktivera den
+
+## Snabbstart — screenpipe-chat (Flask-appen)
+
+Kräver [uv](https://docs.astral.sh/uv/) — installeras med:
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh   # Linux / macOS
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"  # Windows
+```
+
+```bash
+cd demo/screenpipe-chat
+cp .env.example .env          # fyll i dina nycklar
+uv sync                        # installerar beroenden
+uv run python app.py           # startar på http://localhost:5000
+```
 
 ---
 
