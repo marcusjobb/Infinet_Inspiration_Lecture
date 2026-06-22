@@ -1,6 +1,7 @@
 # Installationsguide — macOS
 
 > Steg-för-steg för att sätta upp Screenpipe + Ollama på macOS.
+> Ingen installatör — allt via terminalen eller Homebrew.
 > Beräknad tid: ca 15–20 minuter.
 
 ---
@@ -15,42 +16,39 @@ Tillsammans blir de din personliga, privata minnesassistent.
 
 ---
 
-## Alternativ A — via Homebrew (rekommenderas)
+## Steg 1 — Öppna Terminal
 
-Har du Homebrew installerat? Det är Macs inofficiella pakethanterare och gör installationen smidig.
+Tryck `Cmd + Space`, sök på `Terminal` och öppna den.
 
-**Har du inte Homebrew?** Installera det först:
+---
+
+## Steg 2 — Installera Homebrew (om du inte redan har det)
+
+Homebrew är macOS inofficiella pakethanterare — används av i stort sett alla utvecklare på Mac.
+
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-### Installera Ollama via Homebrew:
+Har du Homebrew redan? Hoppa vidare till steg 3.
+
+---
+
+## Steg 3 — Installera Ollama
+
 ```bash
 brew install ollama
 ```
 
-### Installera Screenpipe via Homebrew:
+Testa att det fungerar:
+
 ```bash
-brew install screenpipe
+ollama --version
 ```
 
-Hoppa sedan till **Steg 3** nedan.
-
 ---
 
-## Alternativ B — via installationsfiler (utan Homebrew)
-
-**Ollama:**
-Gå till [ollama.com](https://ollama.com) och ladda ner macOS-versionen. Öppna `.dmg`-filen och dra Ollama till Applications-mappen.
-
-**Screenpipe:**
-Gå till [screenpipe.com/onboarding](https://screenpipe.com/onboarding) och ladda ner macOS-versionen. Öppna `.dmg`-filen och dra Screenpipe till Applications-mappen.
-
----
-
-## Steg 3 — Ladda ner en AI-modell
-
-Öppna **Terminal** och kör:
+## Steg 4 — Ladda ner en AI-modell
 
 ```bash
 ollama pull llama3.2
@@ -64,43 +62,86 @@ Testa att den fungerar:
 ollama run llama3.2
 ```
 
-Skriv något till den och tryck Enter. Svarar den? Perfekt. Tryck `Ctrl+D` för att avsluta.
+Skriv något och tryck Enter. Svarar den? Tryck `Ctrl+D` för att avsluta.
 
-> **Har du 8 GB RAM eller mer (M1/M2/M3)?** Apple Silicon kör AI-modeller väldigt snabbt. Prova gärna `ollama pull mistral` för bättre resultat.
-
----
-
-## Steg 4 — Koppla Screenpipe till Ollama
-
-1. Öppna Screenpipe från Applications-mappen (eller klicka på ikonen i menyraden)
-2. Gå till **Settings → AI Provider**
-3. Välj **Ollama**
-4. Ange adressen: `http://localhost:11434`
-5. Välj modell: `llama3.2`
-6. Spara
+> **Kör du Apple Silicon (M1/M2/M3/M4)?** Grattis — din dator kör AI-modeller ovanligt snabbt.
+> Prova gärna `ollama pull mistral` för bättre resultat om du har 8 GB RAM eller mer.
 
 ---
 
-## Steg 5 — Ge Screenpipe tillåtelser
+## Steg 5 — Installera Screenpipe (CLI)
 
-macOS är försiktig med vad appar får göra — det är bra! Men vi behöver ge Screenpipe rätt tillåtelser.
+```bash
+brew install screenpipe
+```
 
-Gå till `Systeminställningar → Integritet och säkerhet` och aktivera:
+Verifiera att installationen gick bra:
 
-- ✅ **Skärminspelning** — så Screenpipe kan se vad du har på skärmen
-- ✅ **Mikrofon** — om du vill transkribera ljud
+```bash
+screenpipe --version
+```
 
-Screenpipe bör be om dessa tillåtelser automatiskt vid första start.
+> **Alternativ utan Homebrew:**
+> ```bash
+> curl -fsSL get.screenpi.pe/cli | sh
+> ```
 
 ---
 
-## Steg 6 — Första testet
+## Steg 6 — Starta Screenpipe
 
-Låt Screenpipe köra i ett par minuter. Öppna sedan Screenpipe och skriv en fråga:
+```bash
+screenpipe record
+```
+
+Du ser loggmeddelanden rulla förbi — inspelningen har börjat.
+Låt terminalen vara öppen, eller kör i bakgrunden:
+
+```bash
+screenpipe record &
+```
+
+> Screenpipe öppnar också ett webbgränssnitt på `http://localhost:3030` — det är där du söker och ställer frågor.
+
+---
+
+## Steg 7 — Ge Screenpipe tillåtelser
+
+macOS frågar om tillåtelse när Screenpipe startar för första gången. Godkänn:
+
+- **Skärminspelning** — så Screenpipe kan se vad du har på skärmen
+- **Mikrofon** — om du vill transkribera ljud
+
+Får du ingen fråga? Gå till:
+`Systeminställningar → Integritet och säkerhet → Skärminspelning`
+och lägg till Screenpipe manuellt.
+
+---
+
+## Steg 8 — Koppla Screenpipe till Ollama
+
+Öppna `http://localhost:3030` i din webbläsare. Gå till **Settings → AI Provider** och ange:
+
+- Provider: **Ollama**
+- URL: `http://localhost:11434`
+- Modell: `llama3.2`
+
+Eller via miljövariabler:
+
+```bash
+export SCREENPIPE_AI_PROVIDER=ollama
+export SCREENPIPE_AI_URL=http://localhost:11434
+export SCREENPIPE_AI_MODEL=llama3.2
+screenpipe record
+```
+
+---
+
+## Steg 9 — Första testet
+
+Låt Screenpipe köra i ett par minuter. Gå sedan till `http://localhost:3030` och skriv:
 
 *"Vad har jag jobbat med idag?"*
-
-Screenpipe skickar frågan till Ollama, som svarar baserat på vad den sett på din skärm.
 
 Fungerar det? Grattis — du har en lokal AI-hjärna. 🧠
 
@@ -108,21 +149,22 @@ Fungerar det? Grattis — du har en lokal AI-hjärna. 🧠
 
 ## Felsökning
 
-**"Screenpipe kan inte öppnas" (osäker utvecklare)**
-Högerklicka på appen → Öppna → Öppna ändå. Det räcker att göra det en gång.
-
-**Screenpipe spelar inte in skärmen**
-Kontrollera att appen har tillåtelse under `Systeminställningar → Integritet och säkerhet → Skärminspelning`.
-
 **Ollama svarar inte**
-Starta om Ollama:
+Starta Ollama-servern manuellt i ett eget terminalfönster:
 ```bash
 ollama serve
 ```
-Lämna det terminalfönstret öppet.
 
-**Apple Silicon (M1/M2/M3) — modeller laddas långsamt**
-Första körningen är alltid långsammare. Nästa gång är den snabbare eftersom modellen är cachad.
+**Screenpipe spelar inte in skärmen**
+Kontrollera tillåtelser under:
+`Systeminställningar → Integritet och säkerhet → Skärminspelning`
+
+**"screenpipe: command not found" efter brew install**
+Uppdatera din PATH:
+```bash
+eval "$(/opt/homebrew/bin/brew shellenv)"
+```
+Lägg sedan till den raden i `~/.zshrc` så den körs automatiskt nästa gång.
 
 ---
 

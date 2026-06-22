@@ -1,6 +1,7 @@
 # Installationsguide — Linux
 
 > Steg-för-steg för att sätta upp Screenpipe + Ollama på Linux.
+> Ingen installatör — allt körs via terminalen.
 > Testat på Ubuntu/Debian och Fedora/RHEL.
 > Beräknad tid: ca 15–20 minuter.
 
@@ -35,27 +36,7 @@ Ser du inga felmeddelanden? Kör vidare.
 
 ---
 
-## Steg 2 — Installera Screenpipe
-
-Det enklaste sättet är att köra det officiella installationsskriptet:
-
-```bash
-curl -fsSL get.screenpi.pe/cli | sh
-```
-
-> **Vad gör det här kommandot?**
-> Det laddar ner och kör ett installationsskript direkt från Screenpipes servrar.
-> Om du föredrar att granska skriptet först — besök `screenpipe.com/onboarding` och ladda ner AppImage-versionen manuellt istället.
-
-Testa att installationen gick bra:
-
-```bash
-screenpipe --version
-```
-
----
-
-## Steg 3 — Installera Ollama
+## Steg 2 — Installera Ollama
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
@@ -69,9 +50,7 @@ ollama --version
 
 ---
 
-## Steg 4 — Ladda ner en AI-modell
-
-Nu behöver vi ladda ner en modell som Ollama kan köra. Vi börjar med `llama3.2`:
+## Steg 3 — Ladda ner en AI-modell
 
 ```bash
 ollama pull llama3.2
@@ -85,37 +64,56 @@ Testa att den fungerar:
 ollama run llama3.2
 ```
 
-Skriv något till den och tryck Enter. Svarar den? Tryck `Ctrl+D` för att avsluta.
+Skriv något och tryck Enter. Svarar den? Tryck `Ctrl+D` för att avsluta.
 
 > **Har du 8 GB RAM eller mer?** `ollama pull mistral` ger lite bättre resultat.
 
 ---
 
-## Steg 5 — Starta Screenpipe
+## Steg 4 — Installera Screenpipe (CLI)
 
-Starta Screenpipe med:
+```bash
+curl -fsSL get.screenpi.pe/cli | sh
+```
+
+> **Vad gör det här?**
+> Det laddar ner och kör Screenpipes installationsskript. Vill du granska koden innan du kör den?
+> Öppna `get.screenpi.pe/cli` i webbläsaren och läs igenom den.
+
+Verifiera att installationen gick bra:
+
+```bash
+screenpipe --version
+```
+
+---
+
+## Steg 5 — Starta Screenpipe
 
 ```bash
 screenpipe record
 ```
 
-Du bör se loggmeddelanden som bekräftar att inspelningen har börjat. Låt terminalfönstret vara öppet — Screenpipe körs i förgrunden.
+Du ser loggmeddelanden rulla förbi — inspelningen har börjat.
+Låt terminalen vara öppen, eller kör i bakgrunden:
 
-> Vill du köra det i bakgrunden? Lägg till `&` på slutet: `screenpipe record &`
+```bash
+screenpipe record &
+```
+
+> Screenpipe öppnar också ett webbgränssnitt på `http://localhost:3030` — det är där du söker och ställer frågor.
 
 ---
 
 ## Steg 6 — Koppla Screenpipe till Ollama
 
-Om du kör desktop-versionen (AppImage) hittar du inställningarna i gränssnittet:
+Öppna `http://localhost:3030` i din webbläsare. Gå till **Settings → AI Provider** och ange:
 
-1. Öppna Screenpipe
-2. Gå till **Settings → AI Provider**
-3. Välj **Ollama**
-4. Ange: `http://localhost:11434`
-5. Välj modell: `llama3.2`
+- Provider: **Ollama**
+- URL: `http://localhost:11434`
+- Modell: `llama3.2`
 
-Kör du enbart CLI? Screenpipe använder miljövariabler:
+Eller sätt det direkt som miljövariabler:
 
 ```bash
 export SCREENPIPE_AI_PROVIDER=ollama
@@ -128,14 +126,9 @@ screenpipe record
 
 ## Steg 7 — Första testet
 
-Låt Screenpipe köra i ett par minuter, öppna sedan ett nytt terminalfönster och fråga:
+Låt Screenpipe köra i ett par minuter. Gå sedan till `http://localhost:3030` och skriv:
 
-```bash
-# Öppna Screenpipes webbgränssnitt (brukar öppnas automatiskt)
-# Eller gå till http://localhost:3030 i din webbläsare
-```
-
-Ställ en fråga som: *"Vad har jag jobbat med idag?"*
+*"Vad har jag jobbat med idag?"*
 
 Fungerar det? Grattis — du har en lokal AI-hjärna. 🧠
 
@@ -143,8 +136,15 @@ Fungerar det? Grattis — du har en lokal AI-hjärna. 🧠
 
 ## Felsökning
 
-**"libasound2-dev: package not found"**
-På nyare Ubuntu-versioner heter paketet `libasound2-dev` — prova:
+**"screenpipe: command not found" efter installationen**
+Lägg till sökvägen i din shell-konfiguration:
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**"libasound2-dev: package not found" på nyare Ubuntu**
+Prova alternativt paketnamn:
 ```bash
 sudo apt install libasound2t64 ffmpeg
 ```
@@ -156,7 +156,6 @@ pactl info
 ```
 
 **Ollama svarar inte**
-Starta om Ollama-tjänsten:
 ```bash
 sudo systemctl restart ollama
 # eller manuellt:
@@ -164,7 +163,7 @@ ollama serve &
 ```
 
 **Wayland-problem med skärminspelning**
-Screenpipe stöder Wayland via `xcap`. Fungerar det inte — prova att starta din session i X11-läge istället (välj vid inloggningsskärmen).
+Screenpipe stöder Wayland via xcap. Fungerar det inte — prova att logga in med X11-session istället (väljs vid inloggningsskärmen).
 
 ---
 

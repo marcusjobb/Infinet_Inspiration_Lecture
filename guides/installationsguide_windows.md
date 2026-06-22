@@ -1,6 +1,7 @@
 # Installationsguide — Windows 11
 
 > Steg-för-steg för att sätta upp Screenpipe + Ollama på Windows 11.
+> Ingen installatör — allt körs via terminalen.
 > Beräknad tid: ca 15–20 minuter.
 
 ---
@@ -15,25 +16,34 @@ Tillsammans blir de din personliga, privata minnesassistent.
 
 ---
 
-## Steg 1 — Installera Ollama
+## Steg 1 — Öppna PowerShell som administratör
 
-Gå till [ollama.com](https://ollama.com) och klicka på **Download for Windows**.
+Tryck på **Windows-tangenten**, sök på `PowerShell`, högerklicka och välj **Kör som administratör**.
 
-Kör installationsfilen (`OllamaSetup.exe`) och följ guiden.
+Alla kommandon nedan körs i det fönstret.
 
-När det är klart, öppna **PowerShell** och skriv:
+---
+
+## Steg 2 — Installera Ollama
+
+```powershell
+winget install Ollama.Ollama
+```
+
+> Har du inte winget? Det ingår i Windows 11 och uppdateras via Microsoft Store.
+> Alternativ: Ladda ner installationsfilen från [ollama.com](https://ollama.com) direkt.
+
+Verifiera att det fungerar:
 
 ```powershell
 ollama --version
 ```
 
-Du bör se något i stil med `ollama version 0.x.x`. Ser du det — bra jobbat, Ollama är installerat!
+Du bör se något i stil med `ollama version 0.x.x`. Ser du det? Bra jobbat.
 
 ---
 
-## Steg 2 — Ladda ner en AI-modell
-
-Nu behöver vi en modell som Ollama kan köra. Vi börjar med `llama3.2` som är ett bra val för de flesta datorer.
+## Steg 3 — Ladda ner en AI-modell
 
 ```powershell
 ollama pull llama3.2
@@ -47,43 +57,69 @@ Testa att den fungerar:
 ollama run llama3.2
 ```
 
-Skriv något till den och tryck Enter. Svarar den? Perfekt. Tryck `Ctrl+D` för att avsluta.
+Skriv något och tryck Enter. Svarar den? Tryck `Ctrl+D` för att avsluta.
 
-> **Har du 8 GB RAM eller mer?** Du kan istället köra `ollama pull mistral` för lite bättre resultat.
-
----
-
-## Steg 3 — Installera Screenpipe
-
-Gå till [screenpipe.com/onboarding](https://screenpipe.com/onboarding) och ladda ner Windows-installationsfilen.
-
-Kör installationsfilen och följ guiden. Screenpipe startar automatiskt när installationen är klar.
-
-Du bör se Screenpipe-ikonen i aktivitetsfältet (nere till höger).
+> **Har du 8 GB RAM eller mer?** Prova `ollama pull mistral` för lite bättre resultat.
 
 ---
 
-## Steg 4 — Koppla Screenpipe till Ollama
+## Steg 4 — Installera Screenpipe (CLI)
 
-Nu ska vi tala om för Screenpipe att den ska använda Ollama som sin AI-hjärna.
+Screenpipe installeras via ett PowerShell-skript direkt från deras repo:
 
-1. Klicka på Screenpipe-ikonen i aktivitetsfältet
-2. Gå till **Settings** (inställningar)
-3. Hitta **AI Provider** och välj **Ollama**
-4. Ange adressen: `http://localhost:11434`
-5. Välj modell: `llama3.2`
-6. Spara
+```powershell
+iwr get.screenpi.pe/cli.ps1 | iex
+```
+
+> **Vad gör det här?**
+> Det laddar ner och kör Screenpipes installationsskript. Vill du granska koden innan du kör den?
+> Öppna `get.screenpi.pe/cli.ps1` i webbläsaren och läs igenom den.
+
+Verifiera att installationen gick bra:
+
+```powershell
+screenpipe --version
+```
 
 ---
 
-## Steg 5 — Första testet
+## Steg 5 — Starta Screenpipe
 
-Nu är allt kopplat! Testa att det fungerar:
+```powershell
+screenpipe record
+```
 
-1. Låt Screenpipe köra i ett par minuter
-2. Öppna Screenpipe och skriv en fråga i sökfältet, t.ex.:
-   *"Vad har jag jobbat med idag?"*
-3. Screenpipe skickar frågan till Ollama, som svarar baserat på vad den sett på din skärm
+Du ser loggmeddelanden rulla förbi — det betyder att inspelningen har börjat.
+Låt det här fönstret vara öppet. Screenpipe körs så länge fönstret är öppet.
+
+> Screenpipe öppnar också ett webbgränssnitt på `http://localhost:3030` — det är där du söker och ställer frågor.
+
+---
+
+## Steg 6 — Koppla Screenpipe till Ollama
+
+Öppna `http://localhost:3030` i din webbläsare. Gå till **Settings → AI Provider** och ange:
+
+- Provider: **Ollama**
+- URL: `http://localhost:11434`
+- Modell: `llama3.2`
+
+Eller sätt det direkt som miljövariabler när du startar:
+
+```powershell
+$env:SCREENPIPE_AI_PROVIDER = "ollama"
+$env:SCREENPIPE_AI_URL = "http://localhost:11434"
+$env:SCREENPIPE_AI_MODEL = "llama3.2"
+screenpipe record
+```
+
+---
+
+## Steg 7 — Första testet
+
+Låt Screenpipe köra i ett par minuter. Gå sedan till `http://localhost:3030` och skriv:
+
+*"Vad har jag jobbat med idag?"*
 
 Fungerar det? Grattis — du har en lokal AI-hjärna som aldrig glömmer. 🧠
 
@@ -91,19 +127,23 @@ Fungerar det? Grattis — du har en lokal AI-hjärna som aldrig glömmer. 🧠
 
 ## Felsökning
 
-**Screenpipe svarar inte på frågor**
-Kontrollera att Ollama körs. Öppna PowerShell och kör:
+**"screenpipe: command not found" efter installationen**
+Starta ett nytt PowerShell-fönster. Installationsskriptet kan behöva läggas till i PATH, vilket träder i kraft i nya fönster.
+
+**Ollama svarar inte**
+Kontrollera att Ollama körs:
 ```powershell
 ollama list
 ```
 Ser du `llama3.2` i listan? Bra. Annars kör `ollama pull llama3.2` igen.
 
-**"Cannot connect to Ollama"**
-Kontrollera att adressen i Screenpipe-inställningarna är exakt `http://localhost:11434` — inga extra mellanslag.
+**Windows Defender blockerar screenpipe**
+Det kan hända med nyinstallerade binärer. Klicka på **Mer info → Kör ändå** i varningsfönstret. Screenpipe är open source — källkoden finns på GitHub om du vill verifiera.
 
 **Screenpipe spelar inte in**
-Windows kan behöva ge Screenpipe tillåtelse att spela in skärm och mikrofon. Gå till
-`Inställningar → Integritet och säkerhet → Skärminspelning` och aktivera Screenpipe.
+Windows behöver ge Screenpipe tillåtelse att spela in skärm och mikrofon. Gå till:
+`Inställningar → Integritet och säkerhet → Skärminspelning`
+och aktivera Screenpipe.
 
 ---
 

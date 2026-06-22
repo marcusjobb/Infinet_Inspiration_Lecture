@@ -196,13 +196,20 @@ Skriv agendan till ./output/agenda-{datum}.md
 
 ## Nu kör vi — installera tillsammans
 
-**Windows 11:**
-1. Ladda ner från `screenpipe.com/onboarding`
-2. Installera Ollama från `ollama.com`
-3. Kör `ollama pull llama3.2`
-4. Koppla ihop i Screenpipe-inställningarna
+**Windows 11** (PowerShell som admin):
+```powershell
+winget install Ollama.Ollama
+iwr get.screenpi.pe/cli.ps1 | iex
+```
 
-**Fullständiga guider finns i repot** (Linux + Mac också)
+**Linux / macOS** (Terminal):
+```bash
+curl -fsSL https://ollama.com/install.sh | sh   # Linux
+brew install ollama screenpipe                   # macOS
+curl -fsSL get.screenpi.pe/cli | sh              # Linux
+```
+
+**Fullständiga guider finns i repot** (Windows, Linux, Mac)
 
 ---
 
