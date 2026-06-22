@@ -210,6 +210,24 @@ Screenpipe stöder Wayland via xcap. Fungerar det inte — prova att logga in me
 
 ---
 
+## Bonus — Koppla Screenpipe till Claude Code (MCP)
+
+Har du Claude Code installerat? Du kan lägga till Screenpipe som ett MCP-verktyg — då kan Claude direkt fråga din skärmhistorik utan att du behöver kopiera och klistra.
+
+```bash
+claude mcp add screenpipe -- npx -y screenpipe-mcp
+```
+
+Det är allt. Nästa gång du öppnar Claude Code kan du skriva:
+
+> *"Vad jobbade jag med igår klockan 14?"*
+
+och Claude hämtar svaret direkt från Screenpipe.
+
+> **Kräver:** Claude Code installerat (`npm install -g @anthropic-ai/claude-code`) och att Screenpipe körs i bakgrunden.
+
+---
+
 ## Nästa steg
 
 Nu när du har Screenpipe igång — kolla in **pipeguiden** för att lära dig hur du bygger egna automationer!

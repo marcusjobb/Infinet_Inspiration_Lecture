@@ -171,6 +171,24 @@ Fungerar det? Grattis — du har en lokal AI-hjärna som aldrig glömmer. 🧠
 
 ---
 
+## Bonus — Koppla Screenpipe till Claude Code (MCP)
+
+Har du Claude Code installerat? Du kan lägga till Screenpipe som ett MCP-verktyg — då kan Claude direkt fråga din skärmhistorik utan att du behöver kopiera och klistra.
+
+```powershell
+claude mcp add screenpipe -- npx -y screenpipe-mcp
+```
+
+Det är allt. Nästa gång du öppnar Claude Code kan du skriva:
+
+> *"Vad jobbade jag med igår klockan 14?"*
+
+och Claude hämtar svaret direkt från Screenpipe.
+
+> **Kräver:** Claude Code installerat (`npm install -g @anthropic-ai/claude-code`) och att Screenpipe körs i bakgrunden.
+
+---
+
 ## Felsökning
 
 **"screenpipe: command not found" efter installationen**

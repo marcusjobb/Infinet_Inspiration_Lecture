@@ -226,6 +226,25 @@ Innehåller:
 
 ---
 
+## Bonus — Screenpipe + Claude Code
+
+Har du Claude Code? Koppla in Screenpipe som ett MCP-verktyg:
+
+```bash
+claude mcp add screenpipe -- npx -y screenpipe-mcp
+```
+
+Nu kan du fråga Claude direkt:
+
+> *"Vad jobbade jag med igår klockan 14?"*
+> *"Sammanfatta mitt möte från i morse."*
+> *"Vilket GitHub-repo öppnade jag förra veckan?"*
+
+Claude hämtar svaret från din lokala skärmhistorik.
+Ingen data lämnar din dator. 🔒
+
+---
+
 <!-- _class: title -->
 
 # Frågor? 🙋
