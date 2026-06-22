@@ -115,7 +115,34 @@ screenpipe record
 
 ---
 
-## Steg 7 — Första testet
+## Steg 7 — Hämta din API-nyckel
+
+Screenpipe kräver autentisering för att nå sitt API. Kör det här i ett nytt PowerShell-fönster (medan screenpipe körs i det förra):
+
+```powershell
+screenpipe auth token
+```
+
+Du får tillbaka en nyckel. Kopiera den och sätt den som miljövariabel:
+
+```powershell
+$env:SCREENPIPE_API_KEY = "din-nyckel-här"
+```
+
+Starta sedan om Screenpipe med nyckeln aktiv:
+
+```powershell
+screenpipe record
+```
+
+> Vill du slippa göra det här varje gång? Lägg till nyckeln i din PowerShell-profil:
+> ```powershell
+> Add-Content $PROFILE "`n`$env:SCREENPIPE_API_KEY = 'din-nyckel-här'"
+> ```
+
+---
+
+## Steg 8 — Första testet
 
 Låt Screenpipe köra i ett par minuter. Gå sedan till `http://localhost:3030` och skriv:
 

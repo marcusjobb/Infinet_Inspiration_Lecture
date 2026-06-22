@@ -124,7 +124,31 @@ screenpipe record
 
 ---
 
-## Steg 7 — Första testet
+## Steg 7 — Hämta din API-nyckel
+
+Screenpipe kräver autentisering för att nå sitt API. Öppna ett nytt terminalfönster (medan screenpipe körs i det förra):
+
+```bash
+screenpipe auth token
+```
+
+Du får tillbaka en nyckel. Kopiera den och starta om Screenpipe med nyckeln:
+
+```bash
+export SCREENPIPE_API_KEY=din-nyckel-här
+screenpipe record
+```
+
+Vill du slippa göra det här varje gång? Lägg till det i din shell-konfiguration:
+
+```bash
+echo "export SCREENPIPE_API_KEY=din-nyckel-här" >> ~/.bashrc
+source ~/.bashrc
+```
+
+---
+
+## Steg 8 — Första testet
 
 Låt Screenpipe köra i ett par minuter. Gå sedan till `http://localhost:3030` och skriv:
 
