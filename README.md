@@ -39,6 +39,6 @@ Marcus Medina · Infinet · 2026
 
 ### AI-tjänster för demo/screenpipe-chat
 
-- [1minAI — skaffa API-nyckel](https://app.1min.ai/api?referrer_id=9b12faba-f8a3-49ea-bd25-d8343f1fd965) — 100+ modeller, generöst gratiskonto
+- [1minAI — skaffa API-nyckel](https://app.1min.ai/api?referrer_id=9b12faba-f8a3-49ea-bd25-d8343f1fd965) — 100+ modeller, **15 000 gratistokens per dag** (kräver daglig inloggning på sidan)
 - [1minAI — alla tillgängliga modeller](https://docs.1min.ai/docs/api/chat-with-ai-api?referrer_id=9b12faba-f8a3-49ea-bd25-d8343f1fd965)
 - [openrouter.ai](https://openrouter.ai) — aggregator för 200+ modeller
