@@ -1,0 +1,9 @@
+# Skydda API-nycklar och hemligheter
+.env
+pipes/**/.env
+
+# Output-filer (genereras automatiskt av pipes)
+pipes/**/output/
+
+# macOS
+.DS_Store
