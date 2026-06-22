@@ -153,10 +153,24 @@ Screenpipe *kan* spela in allt. Vi valde bort det.
 
 | Stängt av | Anledning |
 |-----------|-----------|
-| 🎙️ Ljudinspelning | Spela in andras röster utan vetskap = spionage |
+| 🎙️ Ljudinspelning | Spela in andras rösters utan vetskap = spionage |
 | 📋 Clipboard | Lösenord och API-nycklar passerar där |
-| ⌨️ Tangenttryckningar | Allt du skriver — lösenord, privata meddelanden |
 | 🔑 Lösenordshanterare | Explicit blockerade — syns aldrig |
+
+---
+
+## Tangentbordet — en viktig distinktion
+
+| Vad | Status |
+|-----|--------|
+| ⌨️ Tangenttryckningar sparas | **Av** — `--disable-keyboard-capture` |
+| ⌨️ Keyboard-events triggar capture | **På** |
+
+Screenpipe märker att du skriver → tar en skärmdump.
+**Vad** du skriver lagras aldrig.
+
+> Samma princip som en rörelsesensor:
+> den ser att du rör dig — inte vart du går.
 
 > **Verktyget är kraftfullt just för att det ser allt.**
 > Det är ert ansvar att bestämma vad det ska se.
