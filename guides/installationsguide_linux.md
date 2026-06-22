@@ -91,18 +91,35 @@ Skriv något och tryck Enter. Svarar den? Tryck `Ctrl+D` för att avsluta.
 
 ## Steg 4 — Installera Screenpipe (CLI)
 
+Det finns två sätt — prova npm-varianten först, den är mer tillförlitlig på Linux:
+
+**Alternativ A — via npm (rekommenderas på Linux):**
+```bash
+npm install -g screenpipe
+```
+
+**Alternativ B — via curl-skript:**
 ```bash
 curl -fsSL get.screenpi.pe/cli | sh
 ```
 
-> **Vad gör det här?**
-> Det laddar ner och kör Screenpipes installationsskript. Vill du granska koden innan du kör den?
-> Öppna `get.screenpi.pe/cli` i webbläsaren och läs igenom den.
+> Curl-skriptet fungerar inte alltid på alla Linux-varianter — binären kan hamna i npx-cachen utan att läggas till i PATH. Om du kör curl-varianten och `screenpipe` inte hittas efteråt, installera om med npm-kommandot ovan.
 
 Verifiera att installationen gick bra:
 
 ```bash
 screenpipe --version
+```
+
+Ser du inget? Öppna ett **nytt** terminalfönster och försök igen. Fortfarande ingenting?
+
+```bash
+# Kontrollera om Node/npm är installerat
+node --version
+npm --version
+
+# Installera Node om det saknas (Ubuntu/Debian/Zorin)
+sudo apt install nodejs npm
 ```
 
 ---
@@ -180,10 +197,14 @@ Fungerar det? Grattis — du har en lokal AI-hjärna. 🧠
 ## Felsökning
 
 **"screenpipe: command not found" efter installationen**
-Lägg till sökvägen i din shell-konfiguration:
+Curl-skriptet lägger ibland binären i npx-cachen utan att lägga till PATH. Enklaste lösningen:
 ```bash
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
+npm install -g screenpipe
+```
+Eller kör tillfälligt via npx:
+```bash
+npx screenpipe@latest auth token
+npx screenpipe@latest record
 ```
 
 **"libasound2-dev: package not found" på nyare Ubuntu**
