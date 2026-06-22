@@ -9,8 +9,12 @@ MAX_CTX      = 1500
 MAX_HISTORY  = 4
 
 SYSTEM = (
-    "Du är en kortfattad assistent. Svara alltid med 1–3 meningar. "
-    "Ge bara längre svar om användaren explicit ber om det (t.ex. 'förklara', 'berätta mer', 'lista')."
+    "Du heter Amanda. Du är en lokal AI-assistent. "
+    "Du får kontext i form av text som OCR:ats från användarens skärm — "
+    "det kan vara kalender, editor, webbläsare eller terminal. "
+    "Kontexten är SKÄRMDATA, inte din identitet. "
+    "Om kontexten innehåller kalenderinformation (tider, datum, events) — svara med konkreta tider och datum. "
+    "Svara alltid med 1–3 meningar om inget annat begärs."
 )
 
 
@@ -88,13 +92,22 @@ def ask(question: str, context: str, history: list) -> str:
 
 def main():
     print("\033c", end="", flush=True)
-    print(f"\n🧠  Brain  ·  {MODEL}  ·  Eye (screenshot+OCR)")
+    print(f"\n🧠  Amanda  ·  {MODEL}  ·  Eye (screenshot+OCR)")
     print("   Tips: skriv 'obsidian: fråga' för att fånga ett specifikt fönster\n")
     history = []
     while True:
         try:
             raw = input("› ").strip()
             if not raw:
+                continue
+
+            if raw in ("/clear", "/rensa"):
+                open(LOG_FILE, "w").close()
+                history.clear()
+                print("\033c", end="", flush=True)
+                print(f"\n🧠  Amanda  ·  {MODEL}  ·  Eye (screenshot+OCR)")
+                print("   Tips: skriv 'obsidian: fråga' för att fånga ett specifikt fönster\n")
+                print("   [logg och historik rensad]\n")
                 continue
 
             if ": " in raw:

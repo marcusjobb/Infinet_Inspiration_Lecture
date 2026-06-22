@@ -6,6 +6,7 @@ EYE_DIR   = os.path.expanduser("~/.eye")
 LOG_FILE  = os.path.join(EYE_DIR, "log.jsonl")
 SNAP      = os.path.join(tempfile.gettempdir(), "eye_snap.png")
 LANGS     = "swe+eng"
+SKIP_APPS = {s.lower() for s in os.getenv("EYE_SKIP", "kitty").split(",") if s}
 
 os.makedirs(EYE_DIR, exist_ok=True)
 
@@ -53,6 +54,9 @@ def ocr() -> str:
 
 def capture():
     app = active_window_class()
+    if app in SKIP_APPS:
+        print(f"— skip  [{app}]")
+        return
     if not screenshot():
         print("[fel] screenshot misslyckades")
         return
