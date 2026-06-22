@@ -2,10 +2,12 @@
 # =============================================================================
 # Screenpipe startskript — Linux / macOS
 # =============================================================================
-# Minne: 6 månader
-#   --retention-mode media  → OCR-text och transkriptioner bevaras i 180 dagar
-#                             men video/ljud/bild-filer rensas löpande
-#                             → disken sprängs inte, minnena lever kvar
+# Minne: text och OCR bevaras i 180 dagar (6 månader)
+#   --retention-days 1      → video/bild/ljud raderas redan efter 1 dag
+#                             (så fort Screenpipe har skrivit av dem behövs de inte)
+#   --retention-mode media  → OCR-text och transkriptioner bevaras däremot
+#                             i hela 180 dagar — minnena lever kvar utan att
+#                             disken sprängs
 #
 # Redigera listan nedan för att blockera appar du aldrig vill att Screenpipe
 # ska se (t.ex. din lösenordshanterare, bankapp, etc.)
@@ -25,7 +27,7 @@ for w in "${IGNORED_WINDOWS[@]}"; do
 done
 
 exec screenpipe record \
-    --retention-days 180 \
+    --retention-days 1 \
     --retention-mode media \
     --video-quality low \
     --language swedish \
