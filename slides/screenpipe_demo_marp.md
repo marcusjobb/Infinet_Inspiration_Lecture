@@ -36,7 +36,7 @@ Marcus Medina · Senior Consultant · 25 år i branschen
 
 ---
 
-<!-- _class: big -->
+<!-- _class: big invert -->
 
 > *"Framtiden söker inte folk som testat AI —*
 > *den söker problemlösare."*
@@ -57,7 +57,7 @@ Det borde finnas ett verktyg för det här.
 
 ---
 
-<!-- _class: title -->
+<!-- _class: title invert -->
 
 # Akt 1: Det finns redan ett verktyg
 
@@ -88,7 +88,7 @@ Det borde finnas ett verktyg för det här.
 
 ---
 
-<!-- _class: title -->
+<!-- _class: title invert -->
 
 # Akt 2: Det finns ett open source-alternativ
 
@@ -145,7 +145,7 @@ Det är fyra rader logik.
 
 ---
 
-<!-- _class: title -->
+<!-- _class: title invert -->
 
 # Akt 3: Vi byggde det själva
 
@@ -173,7 +173,7 @@ Ungefär 100 rader Python.
 def capture():
     app = active_window_class()   # xprop + xdotool
     screenshot()                  # scrot
-    text = ocr()                  # tesseract
+    text = ocr()                  # easyocr
     log({"ts": now, "app": app, "text": text})
 ```
 
@@ -240,7 +240,7 @@ Inga mystiska AT-SPI2-buggar.
 
 ---
 
-<!-- _class: title -->
+<!-- _class: title invert -->
 
 # 👀 DEMO TID
 
@@ -253,7 +253,7 @@ uv run python brain.py  # Terminal 2
 
 ---
 
-## Vad vi stängde av — och varför
+## Vad vi stängde av i ScreenPipe — och varför
 
 | Vad | Status | Anledning |
 |-----|--------|-----------|
@@ -302,7 +302,7 @@ Det är för att vi stod på deras axlar — och valde vad vi behövde.
 ## Ta med dig hem
 
 **Repot med allt:**
-`github.com/MarcusMedina/Infinet_Inspiration_Lecture`
+`github.com/marcusjobb/Infinet_Inspiration_Lecture`
 
 | Fil | Innehåll |
 |-----|----------|
@@ -328,7 +328,7 @@ Ingen data lämnar maskinen. 🔒
 
 ---
 
-<!-- _class: title -->
+<!-- _class: title invert -->
 
 # Frågor? 🙋
 
@@ -339,7 +339,7 @@ Marcus Medina
 
 ---
 
-<!-- _class: title -->
+<!-- _class: title invert -->
 
 # Nyttiga länkar
 

@@ -2,4 +2,7 @@
 name = "brain"
 version = "0.1.0"
 requires-python = ">=3.10"
-dependencies = ["requests"]
+dependencies = [
+    "easyocr>=1.7.2",
+    "requests",
+]
