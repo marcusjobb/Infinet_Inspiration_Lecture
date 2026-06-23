@@ -306,6 +306,24 @@ Det är för att vi stod på deras axlar — och valde vad vi behövde.
 
 ---
 
+## Hela ett ekosystem
+
+Microsoft lanserade Windows Recall 2024 — "AI som minns allt du gjort."
+
+Reaktionen kom fort.
+
+| Verktyg | Vad | Platform |
+|---------|-----|----------|
+| **OpenRecall** | Screenshot + OCR + sökbar historik | Linux / Mac / Win |
+| **ScreenMind** | Skärmhistorik + AI-chat lokalt | Linux / Mac / Win |
+| **Screenpipe** | OCR + REST API + pipes | Mac / Win (Linux: buggigt) |
+| **eye.py + brain.py** | Det vi just byggde | Linux / Mac |
+
+> *Rörelsen heter "sovereign stack".*
+> *Äg dina data. Kör lokalt. Förstå vad du installerar.*
+
+---
+
 ## Ta med dig hem
 
 **Repot med allt:**
@@ -354,6 +372,8 @@ Marcus Medina
 
 - `ollama.com` — ladda ner Ollama
 - `screenpipe.com` — Screenpipe desktop-app (Win/Mac)
+- `openrecall.github.io` — OpenRecall (Linux/Mac/Win, open source)
+- `github.com/ayushh0110/ScreenMind` — ScreenMind (lokalt, open source)
 - `littlebird.ai` — polerad kommersiell variant (Mac/Win, $15+/mån)
 - `1min.ai` — 100+ modeller, 15 000 gratistokens/dag
 - `openrouter.ai` — aggregator för 200+ modeller
