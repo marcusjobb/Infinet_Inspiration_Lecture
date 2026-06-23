@@ -1,7 +1,7 @@
 # Din digitala hjärna 🧠
-### Screenpipe + Ollama — material från Infinet
+### Screenpipe + Ollama — material för Infinet
 
-Marcus Medina · Infinet · 2026
+Marcus Medina · för Infinet · 2026
 
 ---
 

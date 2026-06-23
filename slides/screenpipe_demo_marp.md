@@ -57,6 +57,13 @@ Det borde finnas ett verktyg för det här.
 
 ---
 
+
+## Anekdot
+
+![alt text](trixig-verktygsset.png)
+
+---
+
 <!-- _class: title invert -->
 
 # Akt 1: Det finns redan ett verktyg
@@ -303,6 +310,8 @@ Det är för att vi stod på deras axlar — och valde vad vi behövde.
 
 **Repot med allt:**
 `github.com/marcusjobb/Infinet_Inspiration_Lecture`
+
+![qrkod](frame.png)
 
 | Fil | Innehåll |
 |-----|----------|
