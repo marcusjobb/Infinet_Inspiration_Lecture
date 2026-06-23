@@ -1,245 +1,168 @@
 # Installationsguide — Linux
 
-> Steg-för-steg för att sätta upp Screenpipe + Ollama på Linux.
-> Ingen installatör — allt körs via terminalen.
-> Testat på Ubuntu/Debian och Fedora/RHEL.
+> Steg-för-steg för att sätta upp Ollama + eye.py + brain.py på Linux.
+> Screenpipe fungerar inte tillförlitligt på Linux — eye.py är det som funkar.
 > Beräknad tid: ca 15–20 minuter.
 
 ---
 
 ## Vad vi installerar
 
-**Ollama** — ett program som låter dig köra AI-modeller lokalt på din dator, helt utan moln.
+**Ollama** — kör AI-modeller lokalt på din dator, helt utan moln.
 
-**Screenpipe** — ett program som spelar in vad du ser och hör på din dator och gör det sökbart med hjälp av AI.
+**eye.py** — tar screenshots med jämna mellanrum, kör OCR och sparar texten i en lokal logg.
 
-Tillsammans blir de din personliga, privata minnesassistent.
+**brain.py** — söker i loggen och ställer frågor till Ollama via terminal.
 
 ---
 
 ## Steg 1 — Installera systemberoenden
 
-Screenpipe behöver ett par paket för att kunna spela in ljud och hantera video. Installera dem innan vi går vidare.
-
-**Ubuntu / Debian:**
 ```bash
 sudo apt update
-sudo apt install libasound2-dev ffmpeg
+sudo apt install scrot xdotool x11-utils python3-pip pipx
 ```
 
-**Fedora / RHEL:**
-```bash
-sudo dnf install alsa-lib ffmpeg
-```
-
-Ser du inga felmeddelanden? Kör vidare.
+> **Fedora / RHEL:**
+> ```bash
+> sudo dnf install scrot xdotool xorg-x11-utils python3-pip pipx
+> ```
 
 ---
 
-## Steg 2 — Installera Ollama
+## Steg 2 — Installera uv
+
+```bash
+pipx install uv
+```
+
+Verifiera:
+```bash
+uv --version
+```
+
+---
+
+## Steg 3 — Installera Ollama
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
-Testa att Ollama är igång:
-
+Verifiera:
 ```bash
 ollama --version
 ```
 
 ---
 
-## Steg 3 — Välj och ladda ner en AI-modell
-
-Välj en modell som passar din dator. Vet du inte vad du har — ta `qwen2.5:3b`, den funkar på nästan allt.
+## Steg 4 — Välj och ladda ner en AI-modell
 
 | Modell | Storlek | Krav | Bra för |
 |--------|---------|------|---------|
 | `gemma2:2b` | ~1.6 GB | 4 GB RAM | Svag dator, CPU-only |
-| `qwen2.5:3b` | ~2 GB | 4 GB RAM | Bra balans, rekommenderas som start |
-| `phi3.5:mini` | ~2.2 GB | 4 GB RAM | Stark på text, bra på gamla Intel-laptops |
-| `llama3.2:3b` | ~2 GB | 4 GB RAM | Metas minsta, snabb |
+| `qwen2.5:3b` | ~2 GB | 4 GB RAM | Bra balans, rekommenderas |
 | `mistral:7b` | ~4.1 GB | 8 GB RAM | Klassiker, solid kvalitet |
 | `qwen2.5:7b` | ~4.7 GB | 8 GB RAM | Bästa kvalitet i 7B-klassen |
-| `ministral` | ~5 GB | 8–12 GB RAM | Ministral 3.8B instruct — det vi kör |
-| `llama3.1:8b` | ~4.7 GB | 8 GB RAM | Bra allround |
-
-> **Gammal Nvidia-kort (GTX 1060/1070/1080)?**
-> Du har troligtvis 6–8 GB VRAM. `mistral:7b` eller `qwen2.5:7b` fungerar bra — Ollama väljer automatiskt rätt kvantisering för att få plats.
->
-> **Ingen GPU / integrerat grafikkort?**
-> Kör på CPU med `gemma2:2b` eller `qwen2.5:3b`. Det är långsammare men fungerar.
-
-Ladda ner din valda modell (byt ut modellnamnet mot ditt val):
+| `gemma3:4b` | ~3 GB | 6 GB RAM | Det vi kör i demo |
 
 ```bash
-ollama pull qwen2.5:3b
+ollama pull gemma3:4b
 ```
-
-Det här laddar ner modellen — kan ta ett par minuter. Hämta en kaffe. ☕
 
 Testa att den fungerar:
-
 ```bash
-ollama run qwen2.5:3b
+ollama run gemma3:4b
 ```
 
-Skriv något och tryck Enter. Svarar den? Tryck `Ctrl+D` för att avsluta.
+Skriv något och tryck Enter. Tryck `Ctrl+D` för att avsluta.
 
 ---
 
-## Steg 4 — Installera Screenpipe (CLI)
+## Steg 5 — Hämta demo-repot
 
 ```bash
-npm install -g screenpipe
-```
-
-Har du inte npm installerat ännu?
-
-```bash
-sudo apt install nodejs npm
-```
-
-Kör sedan `npm install -g screenpipe` igen.
-
-Verifiera att installationen gick bra:
-
-```bash
-screenpipe --version
-```
-
-Ser du inget — öppna ett nytt terminalfönster och försök igen.
-
----
-
-## Steg 5 — Starta Screenpipe
-
-```bash
-screenpipe record
-```
-
-Du ser loggmeddelanden rulla förbi — inspelningen har börjat.
-Låt terminalen vara öppen, eller kör i bakgrunden:
-
-```bash
-screenpipe record &
-```
-
-> Screenpipe öppnar också ett webbgränssnitt på `http://localhost:3030` — det är där du söker och ställer frågor.
-
----
-
-## Steg 6 — Koppla Screenpipe till Ollama
-
-Öppna `http://localhost:3030` i din webbläsare. Gå till **Settings → AI Provider** och ange:
-
-- Provider: **Ollama**
-- URL: `http://localhost:11434`
-- Modell: `llama3.2`
-
-Eller sätt det direkt som miljövariabler:
-
-```bash
-export SCREENPIPE_AI_PROVIDER=ollama
-export SCREENPIPE_AI_URL=http://localhost:11434
-export SCREENPIPE_AI_MODEL=llama3.2
-screenpipe record
+git clone https://github.com/marcusjobb/Infinet_Inspiration_Lecture
+cd Infinet_Inspiration_Lecture/demo
 ```
 
 ---
 
-## Steg 7 — Hämta din API-nyckel
+## Steg 6 — Starta eye.py
 
-Screenpipe kräver autentisering för att nå sitt API. Öppna ett nytt terminalfönster (medan screenpipe körs i det förra):
-
-```bash
-screenpipe auth token
-```
-
-Du får tillbaka en nyckel. Kopiera den och starta om Screenpipe med nyckeln:
+Öppna ett terminalfönster:
 
 ```bash
-export SCREENPIPE_API_KEY=din-nyckel-här
-screenpipe record
+uv run eye.py
 ```
 
-Vill du slippa göra det här varje gång? Lägg till det i din shell-konfiguration:
-
-```bash
-echo "export SCREENPIPE_API_KEY=din-nyckel-här" >> ~/.bashrc
-source ~/.bashrc
+Du ser captures rulla förbi:
 ```
+✓ 1842 tecken  [brave-browser]  2026-06-23T10:14:05
+✓ 923 tecken   [obsidian]       2026-06-23T10:14:22
+```
+
+Låt det här fönstret vara öppet.
 
 ---
 
-## Steg 8 — Första testet
+## Steg 7 — Starta brain.py
 
-Låt Screenpipe köra i ett par minuter. Gå sedan till `http://localhost:3030` och skriv:
+Öppna ett nytt terminalfönster:
 
-*"Vad har jag jobbat med idag?"*
+```bash
+uv run brain.py
+```
 
-Fungerar det? Grattis — du har en lokal AI-hjärna. 🧠
+Skriv en fråga:
+```
+› vad har jag tittat på?
+```
+
+Fungerar det? Du har en lokal AI-hjärna. 🧠
+
+---
+
+## Kommandon i brain.py
+
+| Kommando | Vad det gör |
+|----------|-------------|
+| `din fråga` | Söker i logg och svarar |
+| `obsidian: din fråga` | Söker bara i Obsidian-fönstret |
+| `/list nemo` | Listar alla captures som matchar "nemo" |
+| `/exportera` | Exporterar dagens logg till Obsidian |
+| `/exportera nemo` | AI-sammanfattning om "nemo" → Obsidian |
+| `/clear` | Rensar logg och historik |
+
+---
+
+## Miljövariabler
+
+| Variabel | Standard | Beskrivning |
+|----------|----------|-------------|
+| `AI_MODEL` | `gemma3:4b` | Ollama-modell |
+| `EYE_INTERVAL` | `15` | Sekunder mellan captures |
+| `EYE_SKIP` | `kitty` | Appar att hoppa över |
+| `OBSIDIAN_VAULT` | `~/git/Obsidian/demo` | Sökväg till Obsidian-vault |
 
 ---
 
 ## Felsökning
 
-**"screenpipe: command not found" efter installationen**
-Curl-skriptet lägger ibland binären i npx-cachen utan att lägga till PATH. Enklaste lösningen:
+**"scrot: command not found"**
 ```bash
-npm install -g screenpipe
-```
-Eller kör tillfälligt via npx:
-```bash
-npx screenpipe@latest auth token
-npx screenpipe@latest record
+sudo apt install scrot
 ```
 
-**"libasound2-dev: package not found" på nyare Ubuntu**
-Prova alternativt paketnamn:
+**"xdotool: command not found"**
 ```bash
-sudo apt install libasound2t64 ffmpeg
+sudo apt install xdotool
 ```
 
-**Screenpipe spelar inte in ljud**
-Kontrollera att PipeWire eller PulseAudio körs:
-```bash
-pactl info
-```
+**eye.py startar men fångar ingen text**
+Kontrollera att du kör X11 (inte Wayland). Välj X11-session vid inloggning.
 
 **Ollama svarar inte**
 ```bash
-sudo systemctl restart ollama
-# eller manuellt:
 ollama serve &
 ```
-
-**Wayland-problem med skärminspelning**
-Screenpipe stöder Wayland via xcap. Fungerar det inte — prova att logga in med X11-session istället (väljs vid inloggningsskärmen).
-
----
-
-## Bonus — Koppla Screenpipe till Claude Code (MCP)
-
-Har du Claude Code installerat? Du kan lägga till Screenpipe som ett MCP-verktyg — då kan Claude direkt fråga din skärmhistorik utan att du behöver kopiera och klistra.
-
-```bash
-claude mcp add screenpipe -- npx -y screenpipe-mcp
-```
-
-Det är allt. Nästa gång du öppnar Claude Code kan du skriva:
-
-> *"Vad jobbade jag med igår klockan 14?"*
-
-och Claude hämtar svaret direkt från Screenpipe.
-
-> **Kräver:** Claude Code installerat (`npm install -g @anthropic-ai/claude-code`) och att Screenpipe körs i bakgrunden.
-
----
-
-## Nästa steg
-
-Nu när du har Screenpipe igång — kolla in **pipeguiden** för att lära dig hur du bygger egna automationer!
-
-`guides/skapa_pipes.md`
