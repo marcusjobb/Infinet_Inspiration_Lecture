@@ -31,6 +31,5 @@ $IgnoreArgs = $IgnoredWindows | ForEach-Object { @("--ignored-windows", $_) }
     --disable-audio `
     --disable-clipboard-capture `
     --disable-keyboard-capture `
-    --disable-ui-monitoring `
     --visual-check-interval-ms 5000 `
     @IgnoreArgs

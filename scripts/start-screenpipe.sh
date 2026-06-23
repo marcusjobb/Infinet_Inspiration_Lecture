@@ -35,6 +35,5 @@ exec screenpipe record \
     --disable-audio \
     --disable-clipboard-capture \
     --disable-keyboard-capture \
-    --disable-ui-monitoring \
     --visual-check-interval-ms 5000 \
     "${IGNORE_ARGS[@]}"
