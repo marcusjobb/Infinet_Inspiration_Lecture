@@ -17,6 +17,10 @@
     .msg.user { align-self: flex-end; background: #1d4ed8; color: #fff; }
     .msg.assistant { align-self: flex-start; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; }
     .msg.assistant .ctx-badge { font-size: 0.7rem; color: #86efac; margin-top: 0.5rem; }
+    .msg.assistant .msg-footer { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; }
+    .export-btn { font-size: 0.7rem; background: none; border: 1px solid #334155; color: #94a3b8; padding: 0.2rem 0.5rem; border-radius: 4px; cursor: pointer; }
+    .export-btn:hover { border-color: #7dd3fc; color: #7dd3fc; }
+    .export-btn.saved { color: #86efac; border-color: #86efac; }
     .msg.error { align-self: flex-start; background: #450a0a; color: #fca5a5; }
     form { display: flex; gap: 0.5rem; padding: 1rem 1.5rem; background: #1e293b; border-top: 1px solid #334155; }
     input[type=text] { flex: 1; background: #0f172a; color: #e2e8f0; border: 1px solid #334155; border-radius: 8px; padding: 0.6rem 1rem; font-size: 1rem; outline: none; }
@@ -34,7 +38,8 @@
       <option value="{{ p }}">{{ p }}</option>
       {% endfor %}
     </select>
-    <input id="model" type="text" placeholder="modell (t.ex. ministral)" style="width:160px">
+    <select id="model-select" style="width:180px;display:none"></select>
+    <input id="model-input" type="text" placeholder="modell" style="width:160px">
     <span id="status">kontrollerar...</span>
   </header>
 
@@ -45,12 +50,41 @@
     <button type="submit" id="send-btn">Skicka</button>
   </form>
 
-  <script>
-    const messages = document.getElementById("messages");
+  <script type="module">
+    const messagesEl = document.getElementById("messages");
     const form = document.getElementById("chat-form");
     const input = document.getElementById("input");
     const btn = document.getElementById("send-btn");
     const status = document.getElementById("status");
+    const providerEl = document.getElementById("provider");
+    const modelSelect = document.getElementById("model-select");
+    const modelInput = document.getElementById("model-input");
+
+    let history = [];
+
+    function getModel() {
+      return providerEl.value === "ollama"
+        ? modelSelect.value
+        : modelInput.value || undefined;
+    }
+
+    async function loadOllamaModels() {
+      try {
+        const r = await fetch("/ollama/models");
+        const data = await r.json();
+        modelSelect.innerHTML = data.models.map(m =>
+          `<option value="${m}">${m}</option>`
+        ).join("");
+      } catch {}
+    }
+
+    function updateModelUI() {
+      const isOllama = providerEl.value === "ollama";
+      modelSelect.style.display = isOllama ? "" : "none";
+      modelInput.style.display = isOllama ? "none" : "";
+    }
+
+    providerEl.addEventListener("change", updateModelUI);
 
     async function checkStatus() {
       const r = await fetch("/status");
@@ -59,27 +93,73 @@
       status.className = data.screenpipe ? "ok" : "err";
     }
 
+    async function exportMessage(text, btn) {
+      const topic = prompt("Ämne för Obsidian-noten (lämna tomt för 'chattexport'):", "") ?? "";
+      btn.textContent = "sparar…";
+      try {
+        const r = await fetch("/export", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: text, topic }),
+        });
+        const data = await r.json();
+        btn.textContent = data.error ? "✗ fel" : "✓ sparad";
+        btn.classList.toggle("saved", !data.error);
+      } catch {
+        btn.textContent = "✗ fel";
+      }
+    }
+
     function addMessage(role, text, contextUsed = false) {
       const div = document.createElement("div");
       div.className = `msg ${role}`;
       div.textContent = text;
-      if (role === "assistant" && contextUsed) {
-        const badge = document.createElement("div");
-        badge.className = "ctx-badge";
-        badge.textContent = "✓ Screenpipe-kontext använd";
-        div.appendChild(badge);
+      if (role === "assistant") {
+        const footer = document.createElement("div");
+        footer.className = "msg-footer";
+        if (contextUsed) {
+          const badge = document.createElement("span");
+          badge.className = "ctx-badge";
+          badge.textContent = "✓ Screenpipe-kontext använd";
+          footer.appendChild(badge);
+        }
+        const expBtn = document.createElement("button");
+        expBtn.className = "export-btn";
+        expBtn.textContent = "📤 Exportera";
+        expBtn.addEventListener("click", () => exportMessage(text, expBtn));
+        footer.appendChild(expBtn);
+        div.appendChild(footer);
       }
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
+      messagesEl.appendChild(div);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const msg = input.value.trim();
       if (!msg) return;
+      input.value = "";
+
+      if (msg.startsWith("/export")) {
+        const topic = msg.split(/\s+/).slice(1).join(" ");
+        const last = [...messagesEl.querySelectorAll(".msg.assistant")].pop();
+        if (!last) { addMessage("error", "Inget svar att exportera."); return; }
+        const text = last.childNodes[0].textContent;
+        try {
+          const r = await fetch("/export", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ content: text, topic }),
+          });
+          const data = await r.json();
+          addMessage("assistant", data.error ? `Export misslyckades: ${data.error}` : `✓ Sparad till Obsidian${topic ? ' som "' + topic + '"' : ''}.`);
+        } catch {
+          addMessage("error", "Kunde inte nå servern.");
+        }
+        return;
+      }
 
       addMessage("user", msg);
-      input.value = "";
       btn.disabled = true;
 
       try {
@@ -88,8 +168,9 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             message: msg,
-            provider: document.getElementById("provider").value,
-            model: document.getElementById("model").value || undefined,
+            provider: providerEl.value,
+            model: getModel(),
+            history: history,
           }),
         });
         const data = await r.json();
@@ -97,6 +178,9 @@
           addMessage("error", "Fel: " + data.error);
         } else {
           addMessage("assistant", data.response, data.context_used);
+          history.push({ role: "user", content: msg });
+          history.push({ role: "assistant", content: data.response });
+          if (history.length > 10) history = history.slice(-10);
         }
       } catch {
         addMessage("error", "Kunde inte nå servern.");
@@ -106,6 +190,8 @@
       }
     });
 
+    await loadOllamaModels();
+    updateModelUI();
     checkStatus();
     setInterval(checkStatus, 30000);
   </script>
